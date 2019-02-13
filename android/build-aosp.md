@@ -218,18 +218,38 @@ Hit any key to stop autoboot: 0
 =>
 ```
 
+### Setup Network Parameters
+
+To use TFTP, we have to setup tftp server IP and netmasks. If you use a class-C (/24) local network, you need to setup following parameters.
+
+|Parameter  | Description                       |      default value |
++-----------+-----------------------------------+--------------------+
+|serverip   |	IP address of TFTP server       |	192.168.11.1 |
+|gatewayip  |	IP address of default gateway   |	192.168.11.1 |
+|ipaddr     |	IP address of the akebi96 board |	192.168.11.10|
+|netmask    |	Netmask of the local network    |	255.255.255.0|
+
+You can setup these parameters as below (just an example).
+
+=> setenv serverip 192.168.1.2
+=> setenv gatewayip 192.168.1.1
+=> setenv ipaddr 192.168.1.3
+=> setenv netmask 255.255.255.0
+
+
+
 ### Create GPT on eMMC using U-Boot
 
 Please note the partition sizes are hardcoded in Android (BoardConfig.mk) as below.
 source in order to generate exact sized images.
 
-|Label|	Start (MB)|	Size (MB)|	Start Sector|	UUID|
-+-----+-----------+--------------+------------------+--------+
-|boot  |	32|	64|	0x0010000|	49A4D17F-93A3-45C1-A0DE-F50B2EBE2599|
-|recovery|	96|	64|	0x0030000|	4177C722-9E92-4AAB-8644-43502BFD5506|
-|system|	160|	1536|	0x0050000|	38F428E6-D326-425D-9140-6E0EA133647C|
-|userdata|	1696|	1024|	0x0350000|	DC76DDA9-5AC1-491C-AF42-A82591580C0D|
-|vendor|	2720|	1024|	0x0550000|	C5A0AEEC-13EA-11E5-A1B1-001E67CA0C3C|
+|Label   |Start (MB)|Size (MB)|	Start Sector|					UUID|
++--------+----------+---------+-------------+---------------------------------------+
+|boot    |	  32|	    64|    0x0010000|	49A4D17F-93A3-45C1-A0DE-F50B2EBE2599|
+|recovery|	  96|	    64|    0x0030000|	4177C722-9E92-4AAB-8644-43502BFD5506|
+|system  |	 160|	  1536|    0x0050000|	38F428E6-D326-425D-9140-6E0EA133647C|
+|userdata|	1696|	  1024|    0x0350000|	DC76DDA9-5AC1-491C-AF42-A82591580C0D|
+|vendor  |	2720|	  1024|    0x0550000|	C5A0AEEC-13EA-11E5-A1B1-001E67CA0C3C|
 
 On the U-Boot console, run following command to write the GPT partitions on eMMC
 
