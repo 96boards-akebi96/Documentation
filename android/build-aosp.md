@@ -161,14 +161,19 @@ host $ split -d -b 512M system-raw.img system.img
 host $ rm system-raw.img
 ```
 
-Since the system raw image size is 1.5GB, you must have 3 files, system.img0, system.img1, and system.img2.
+Since the system raw image size is 1.5GB, you must have 3 files, _system.img00, _system.img01, and _system.img02. Then make those sparse-image and compressed.
+
+```
+host $ for img in _system.img0* ; do img2simg $img ${img#_}; rm $img ; gzip ${img#_}; done
+```
+
 
 ### Copy image files for TFTP
 
 Copy the image files into tftpboot directory.
 
 ```
-host $ cp boot_fat.img system.img* userdata.img vendor.img ~/aosp/tftpboot/
+host $ cp boot_fat_sparse.img system.img*.gz userdata.img vendor.img ~/aosp/tftpboot/
 ```
 
 Now you have AOSP images under ~/aosp/tftpboot/
@@ -262,11 +267,11 @@ On the U-Boot console, run following command to write the GPT partitions on eMMC
 Download images over TFTP and write it to eMMC. TFTP get will take a long time.
 
 ```
-=> tftpboot c0000000 boot_fat.img ; mmc write c0000000 10000 20000
-=> tftpboot c0000000 system.img0 ; mmc write c0000000 50000 100000
-=> tftpboot c0000000 system.img1 ; mmc write c0000000 150000 100000
-=> tftpboot c0000000 system.img2 ; mmc write c0000000 250000 100000
-=> tftpboot c0000000 userdata.img ; mmc swrite c0000000 350000
+=> tftpboot c0000000 boot_fat_sparse.img ; mmc swrite c0000000 10000
+=> tftpboot 85000000 system.img00.gz && unzip 85000000 c0000000 && mmc erase  50000 100000 && mmc swrite c0000000 50000
+=> tftpboot 85000000 system.img01.gz && unzip 85000000 c0000000 && mmc erase 150000 100000 && mmc swrite c0000000 150000
+=> tftpboot 85000000 system.img02.gz && unzip 85000000 c0000000 && mmc erase 250000 100000 && mmc swrite c0000000 250000
+=> tftpboot c0000000 userdata.img && mmc erase 350000 200000 && mmc swrite c0000000 350000
 => tftpboot c0000000 vendor.img ; mmc swrite c0000000 550000
 ```
 
