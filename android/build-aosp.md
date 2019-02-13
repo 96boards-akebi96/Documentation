@@ -37,9 +37,9 @@ export PATH="$PATH:/opt/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf/bin:
 Set environmental variables and make working directories.
 
 ```
-host $ export ARCH=arm64
-host $ export CROSS_COMPILE=aarch64-linux-gnu-
-host $ mkdir -p ~/aosp/kernel-build ~/aosp/android ~/aosp/images ~/aosp/tftpboot
+export ARCH=arm64
+export CROSS_COMPILE=aarch64-linux-gnu-
+mkdir -p ~/aosp/kernel-build ~/aosp/android ~/aosp/images ~/aosp/tftpboot
 ```
 
 ### Download Kernel Related Repositories
@@ -47,12 +47,12 @@ host $ mkdir -p ~/aosp/kernel-build ~/aosp/android ~/aosp/images ~/aosp/tftpboot
 Download kernel, kconfigs and out-of-tree drivers as below 
 
 ```
-host $ cd ~/aosp/
-host $ git clone -b unph-android-v4.19-testing --single-branch https://github.com/96boards-akebi96/linux.git
-host $ git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-configs.git
-host $ git clone -b master --single-branch https://android.googlesource.com/kernel/configs
-host $ git clone -b master --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
-host $ git clone -b master --single-branch https://github.com/96boards-akebi96/rtk_btusb.git
+cd ~/aosp/
+git clone -b unph-android-v4.19-testing --single-branch https://github.com/96boards-akebi96/linux.git
+git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-configs.git
+git clone -b master --single-branch https://android.googlesource.com/kernel/configs
+git clone -b master --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
+git clone -b master --single-branch https://github.com/96boards-akebi96/rtk_btusb.git
 ```
 
 ### Download Mali kernel driver
@@ -60,7 +60,7 @@ host $ git clone -b master --single-branch https://github.com/96boards-akebi96/r
 Download mali patches.
 
 ```
-host $ git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-mali-patches.git
+git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-mali-patches.git
 ```
 
 Also get the Mali kernel driver (TX041-SW-99002-r26p0-01rel0.tgz) from (arm web site)[https://developer.arm.com/products/software/mali-drivers/midgard-kernel].
@@ -68,10 +68,10 @@ Also get the Mali kernel driver (TX041-SW-99002-r26p0-01rel0.tgz) from (arm web 
 And prepare the source code.
 
 ```
-host $ tar xzf TX041-SW-99002-r26p0-01rel0.tgz -C ~/aosp/
-host $ mv ~/aosp/TX041-SW-99002-r26p0-01rel0 ~/aosp/mali-midgard
-host $ cd mali-midgard
-host $ cat ../akebi96-mali-patches/series | while read $p; do \
+tar xzf TX041-SW-99002-r26p0-01rel0.tgz -C ~/aosp/
+mv ~/aosp/TX041-SW-99002-r26p0-01rel0 ~/aosp/mali-midgard
+cd mali-midgard
+cat ../akebi96-mali-patches/series | while read $p; do \
        patch -p1 < ../akebi96-mali-patches/$p; done
 ```
 
@@ -80,38 +80,38 @@ host $ cat ../akebi96-mali-patches/series | while read $p; do \
 And build the kernel as below
 
 ```
-host $ cd ~/aosp/linux
-host $ export KBUILD=~/aosp/kernel-build
-host $ export KCONFIG_CONFIG=$KBUILD/.config
-host $ export JOBS=`getconf _NPROCESSORS_ONLN`
-host $ make O=$KBUILD  defconfig
-host $ ./scripts/kconfig/merge_config.sh -m ${KCONFIG_CONFIG} \
+cd ~/aosp/linux
+export KBUILD=~/aosp/kernel-build
+export KCONFIG_CONFIG=$KBUILD/.config
+export JOBS=`getconf _NPROCESSORS_ONLN`
+make O=$KBUILD  defconfig
+./scripts/kconfig/merge_config.sh -m ${KCONFIG_CONFIG} \
         ~/aosp/akebi96-configs/linux/akebi96-base.config \
         ~/aosp/configs/android-4.19/android-base.config \
         ~/aosp/configs/android-4.19/android-recommended.config \
         ~/aosp/configs/android-4.19/android-recommended-arm64.config \
         ~/aosp/akebi96-configs/linux/akebi96-aosp-vendor.config
-host $ make O=$KBUILD  olddefconfig
-host $ make O=$KBUILD  -j $JOBS  Image socionext/uniphier-ld20-akebi96.dtb
-host $ cp ~/aosp/kernel-build/arch/arm64/boot/Image ~/aosp/images/
-host $ cp ~/aosp/kernel-build/arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb ~/aosp/images/
+make O=$KBUILD  olddefconfig
+make O=$KBUILD  -j $JOBS  Image socionext/uniphier-ld20-akebi96.dtb
+cp ~/aosp/kernel-build/arch/arm64/boot/Image ~/aosp/images/
+cp ~/aosp/kernel-build/arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb ~/aosp/images/
 ```
 
 And Build out-of-tree drivers
 
 ```
-host $ KVER=`make O=$KBUILD -s kernelrelease`
-host $ cd ~/aosp/rtl8822bu/
-host $ make clean
-host $ make KSRC=~/aosp/linux KVER=${KVER} O=${KBUILD} -j ${JOBS}
-host $ cp 8822bu.ko ~/aosp/images/
-host $ cd ~/aosp/rtk_btusb/
-host $ make KBUILD=${KBUILD} -j ${JOBS}
-host $ cp rtk_btusb.ko ~/aosp/images/
-host $ cd ~/aosp/mali-midgard/
-host $ make clean
-host $ make KERNEL_DIR=~/aosp/linux MAKETOP=~/aosp/images O=${KBUILD} modules -j  $JOBS
-host $ cp drivers/gpu/arm/midgard/mali_kbase.ko ~/aosp/images/
+KVER=`make O=$KBUILD -s kernelrelease`
+cd ~/aosp/rtl8822bu/
+make clean
+make KSRC=~/aosp/linux KVER=${KVER} O=${KBUILD} -j ${JOBS}
+cp 8822bu.ko ~/aosp/images/
+cd ~/aosp/rtk_btusb/
+make KBUILD=${KBUILD} -j ${JOBS}
+cp rtk_btusb.ko ~/aosp/images/
+cd ~/aosp/mali-midgard/
+make clean
+make KERNEL_DIR=~/aosp/linux MAKETOP=~/aosp/images O=${KBUILD} modules -j  $JOBS
+cp drivers/gpu/arm/midgard/mali_kbase.ko ~/aosp/images/
 ```
 
 At this point, ~/aosp/images/ contain the kernel, dtb and modules that we copy over images that come with android sync.
@@ -123,17 +123,17 @@ At this point, ~/aosp/images/ contain the kernel, dtb and modules that we copy o
 Download and sync the AOSP repositories. This may take a long time (depends on your network performance, etc.)
 
 ```
-host $ cd ~/aosp/android
-host $ git clone  -b master --single-branch https://github.com/96boards-akebi96/akebi96-known-good-manifests.git
-host $ repo init -u https://android.googlesource.com/platform/manifest -b master
-host $ cp akebi96-known-good-manifests/akebi96.xml .repo/manifests/
-host $ repo sync -j $JOBS -m akebi96.xml
+cd ~/aosp/android
+git clone  -b master --single-branch https://github.com/96boards-akebi96/akebi96-known-good-manifests.git
+repo init -u https://android.googlesource.com/platform/manifest -b master
+cp akebi96-known-good-manifests/akebi96.xml .repo/manifests/
+repo sync -j $JOBS -m akebi96.xml
 ```
 
 And copy the pre-build binaries
 
 ```
-host $ cp ~/aosp/images/Image ~/aosp/images/uniphier-ld20-akebi96.dtb \
+cp ~/aosp/images/Image ~/aosp/images/uniphier-ld20-akebi96.dtb \
        ~/aosp/images/8822bu.ko ~/aosp/images/rtk_btusb.ko ~/aosp/images/mali_kbase.ko \
        device/linaro/akebi96/copy/
 ```
@@ -143,10 +143,10 @@ host $ cp ~/aosp/images/Image ~/aosp/images/uniphier-ld20-akebi96.dtb \
 This may take a few hours. Setting ARCH=arm is for building OP-TEE.
 
 ```
-host $ export ARCH=arm
-host $ source build/envsetup.sh
-host $ lunch akebi96-userdebug
-host $ make -j $JOBS
+export ARCH=arm
+source build/envsetup.sh
+lunch akebi96-userdebug
+make -j $JOBS
 ```
 
 ### Split system.img into smaller files
@@ -156,15 +156,15 @@ Since LD20 reserves the last 0x4b bytes of memory for each channel, we can not t
 Convert sparse-image to raw image and split it as below.
 
 ```
-host $ simg2img system.img system-raw.img
-host $ split -d -b 512M system-raw.img system.img
-host $ rm system-raw.img
+simg2img system.img system-raw.img
+split -d -b 512M system-raw.img system.img
+rm system-raw.img
 ```
 
 Since the system raw image size is 1.5GB, you must have 3 files, _system.img00, _system.img01, and _system.img02. Then make those sparse-image and compressed.
 
 ```
-host $ for img in _system.img0* ; do img2simg $img ${img#_}; rm $img ; gzip ${img#_}; done
+for img in _system.img0* ; do img2simg $img ${img#_}; rm $img ; gzip ${img#_}; done
 ```
 
 
@@ -173,7 +173,7 @@ host $ for img in _system.img0* ; do img2simg $img ${img#_}; rm $img ; gzip ${im
 Copy the image files into tftpboot directory.
 
 ```
-host $ cp boot_fat_sparse.img system.img*.gz userdata.img vendor.img ~/aosp/tftpboot/
+cp boot_fat_sparse.img system.img*.gz userdata.img vendor.img ~/aosp/tftpboot/
 ```
 
 Now you have AOSP images under ~/aosp/tftpboot/
@@ -188,8 +188,8 @@ To install the image, you may need the latest U-Boot on the board since it suppo
 Install TFTPD and start it. This is Ubuntu based system example.
 
 ```
-host $ apt-get install -y tftpd-hpa
-host $ /usr/sbin/in.tftpd --user tftp --address 0.0.0.0:69 --secure ~/aosp/tftpboot
+apt-get install -y tftpd-hpa
+/usr/sbin/in.tftpd --user tftp --address 0.0.0.0:69 --secure ~/aosp/tftpboot
 ```
 
 ### Board Setup
@@ -209,7 +209,7 @@ Now you are ready to boot up the board.
 At first, you must start minicom (or other serial console program) on the USB-UART port, which is detected when you connect it to host PC. If it is ttyUSB0, run below command on host PC.
 
 ```
-host $ minicom -D /dev/ttyUSB0
+minicom -D /dev/ttyUSB0
 ```
 
 Then, power up the board (push the power switch). Soon you will see U-Boot boot up.
