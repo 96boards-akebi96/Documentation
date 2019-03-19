@@ -70,8 +70,8 @@ And prepare the source code.
 ```
 tar xzf TX041-SW-99002-r26p0-01rel0.tgz -C ~/aosp/
 mv ~/aosp/TX041-SW-99002-r26p0-01rel0 ~/aosp/mali-midgard
-cd mali-midgard
-cat ../akebi96-mali-patches/series | while read $p; do \
+cd mali-midgard/driver/product/kernel/
+cat ~/aosp/akebi96-mali-patches/series | while read $p; do \
        patch -p1 < ../akebi96-mali-patches/$p; done
 ```
 
