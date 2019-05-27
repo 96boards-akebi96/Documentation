@@ -118,7 +118,7 @@ At this point, ~/aosp/images/ contain the kernel, dtb and modules that we copy o
 
 ## Build AOSP 9 for Akebi96
 
-### Downlaod AOSP 9 (latest) for Akebi96
+### Downlaod AOSP 9 for Akebi96
 
 Download and sync the AOSP repositories. This may take a long time (depends on your network performance, etc.)
 
@@ -167,7 +167,6 @@ Since the system raw image size is 1.5GB, you must have 3 files, _system.img00, 
 for img in _system.img0* ; do img2simg $img ${img#_}; rm $img ; gzip ${img#_}; done
 ```
 
-
 ### Copy image files for TFTP
 
 Copy the image files into tftpboot directory.
@@ -178,11 +177,10 @@ cp boot_fat_sparse.img system.img*.gz userdata.img vendor.img ~/aosp/tftpboot/
 
 Now you have AOSP images under ~/aosp/tftpboot/
 
+
 ## Install AOSP to Akebi96
 
-Here, we will explain how to install AOSP image via TFTP. Of course there are several other ways to do it, but using TFTP will be a solid way to do that (but take a long time to transfer the image). 
-
-To install the image, you may need the latest U-Boot on the board since it supports writing Android Sparse Image to eMMC.
+Here is the instruction to install AOSP image via TFTP. You can also install AOSP image using a USB flash drive if you have it. In that case, see Akebi96-tools [Akebi96 USB Recovery Script](https://github.com/96boards-akebi96/akebi96-tools/tree/master/usbflash) for details.
 
 ### Start TFTPD
 Install TFTPD and start it. This is Ubuntu based system example.
