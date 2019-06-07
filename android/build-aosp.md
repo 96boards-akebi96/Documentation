@@ -53,26 +53,7 @@ git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-
 git clone -b master --single-branch https://android.googlesource.com/kernel/configs
 git clone -b master --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/rtk_btusb.git
-```
-
-### Download Mali kernel driver
-
-Download mali patches.
-
-```
-git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-mali-patches.git
-```
-
-Also get the Mali kernel driver (TX041-SW-99002-r26p0-01rel0.tgz) from the arm web site ( https://developer.arm.com/products/software/mali-drivers/midgard-kernel ).
-
-And prepare the source code.
-
-```
-tar xzf TX041-SW-99002-r26p0-01rel0.tgz -C ~/aosp/
-mv ~/aosp/TX041-SW-99002-r26p0-01rel0 ~/aosp/mali-midgard
-cd mali-midgard/driver/product/kernel/
-cat ~/aosp/akebi96-mali-patches/series | while read $p; do \
-       patch -p1 < ../akebi96-mali-patches/$p; done
+git clone -b master --single-branch https://github.com/96boards-akebi96/mali-midgard.git
 ```
 
 ### Build ACK-4.19 based kernel
