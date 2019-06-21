@@ -13,10 +13,18 @@ A comprehensive guide to using Akebi96 Enterprise Edition 96board.
 ## Software
 
 - [Build Firmware from Source](android/build-aosp-firmware.md)
- - Describe how to download, build and install Firmware (bootloader) on the Akebi96 board.
+ - Describe how to download and build on the Akebi96 board.
 
 - [Build AOSP from Source](android/build-aosp.md)
- - Describe how to download, build and install AOSP on the Akebi96 board.
+ - Describe how to download and build AOSP on the Akebi96 board.
+
+- [Flash Images via USB flash device](recovery/recovery-boot.md)
+ - Describe how to install firmware and AOSP image on the Akebi96 board
+   using a USB flash device.
+
+- [Flash Images via TFTP](android/install-tftp.md)
+ - Describe how to install firmware and AOSP image on the Akebi96 board
+   using TFTP server.
 
 ## License
 

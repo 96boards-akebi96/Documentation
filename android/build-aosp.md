@@ -137,132 +137,26 @@ Since LD20 reserves the last 0x4b bytes of memory for each channel, we can not t
 Convert sparse-image to raw image and split it as below.
 
 ```
+cd ~/aosp/android/out/target/product/akebi96/
 simg2img system.img system-raw.img
 split -d -b 512M system-raw.img system.img
 rm system-raw.img
 ```
 
-Since the system raw image size is 1.5GB, you must have 3 files, _system.img00, _system.img01, and _system.img02. Then make those sparse-image and compressed.
+Since the system raw image size is 1.5GB, you must have 3 files, ```_system.img00```, ```_system.img01```, and ```_system.img02```. Then make those sparse-image and compressed.
 
 ```
 for img in _system.img0* ; do img2simg $img ${img#_}; rm $img ; gzip ${img#_}; done
 ```
 
-### Copy image files for TFTP
+## Check Images
 
-Copy the image files into tftpboot directory.
+Now you should have following image files in ```~/aosp/android/out/target/product/akebi96/```
 
-```
-cp boot_fat_sparse.img system.img*.gz userdata.img vendor.img ~/aosp/tftpboot/
-```
+- boot_fat_sparse.img
+- system.img*.gz
+- userdata.img
+- vendor.img
 
-Now you have AOSP images under ~/aosp/tftpboot/
-
-
-## Install AOSP to Akebi96
-
-Here is the instruction to install AOSP image via TFTP. You can also install AOSP image using a USB flash drive if you have it. In that case, see Akebi96-tools [Akebi96 USB Recovery Script](https://github.com/96boards-akebi96/akebi96-tools/tree/master/usbflash) for details.
-
-### Start TFTPD
-Install TFTPD and start it. This is Ubuntu based system example.
-
-```
-apt-get install -y tftpd-hpa
-/usr/sbin/in.tftpd --user tftp --address 0.0.0.0:69 --secure ~/aosp/tftpboot
-```
-
-### Board Setup
-
-Setup the board to connect cables correctly. 
-
-- Make sure the Power Switch(SW2402) is off (pop-up)
-- Connect AC adapter to the DC Jack (J2401)
-- Connect Ethernet cable to the ether connector (CN3600) and other side to the ethernet hub (which connect to host PC too)
-- Connect micro-USB cable to USB-UART UART#0(CN2501) and other side to host PC
-- Make sure the Boot Mode Switch (SW2002) is "BE_BOOT"
-
-Now you are ready to boot up the board.
-
-### Board Bootup
-
-At first, you must start minicom (or other serial console program) on the USB-UART port, which is detected when you connect it to host PC. If it is ttyUSB0, run below command on host PC.
-
-```
-minicom -D /dev/ttyUSB0
-```
-
-Then, power up the board (push the power switch). Soon you will see U-Boot boot up.
-
-Please interrupt the boot when you see "Hit any key to stop autoboot:", then you will be in the U-Boot console like below.
-
-```
-Warning: ethernet@65000000 (eth0) using random MAC address - ee:ec:8b:f9:85:5c
-eth0: ethernet@65000000
-Hit any key to stop autoboot: 0 
-=>
-```
-
-### Setup Network Parameters
-
-To use TFTP, we have to setup tftp server IP and netmasks. If you use a class-C (/24) local network, you need to setup following parameters.
-
-|Parameter  | Description                     |    default value|
-|:----------|:-------------------------------| ----------------:|
-|serverip   |	IP address of TFTP server       |	192.168.11.1 |
-|gatewayip  |	IP address of default gateway   |	192.168.11.1 |
-|ipaddr     |	IP address of the akebi96 board |	192.168.11.10 |
-|netmask    |	Netmask of the local network    |	255.255.255.0 |
-
-You can setup these parameters as below (just an example).
-
-```
-=> setenv serverip 192.168.1.2
-=> setenv gatewayip 192.168.1.1
-=> setenv ipaddr 192.168.1.3
-=> setenv netmask 255.255.255.0
-```
-
-### Create GPT on eMMC using U-Boot
-
-Please note the partition sizes are hardcoded in Android (BoardConfig.mk) as below.
-source in order to generate exact sized images.
-
-|Label   |Start(MB)|Size(MB)| Start Sector|					UUID|
-|:-------|--------:|-------:|------------:|--------------------------------------|
-|boot    |	   32|	     64|    0x0010000| 49A4D17F-93A3-45C1-A0DE-F50B2EBE2599|
-|recovery|	   96|	     64|    0x0030000| 4177C722-9E92-4AAB-8644-43502BFD5506|
-|system  |	  160|	   1536|    0x0050000| 38F428E6-D326-425D-9140-6E0EA133647C|
-|userdata|	 1696|	   1024|    0x0350000| DC76DDA9-5AC1-491C-AF42-A82591580C0D|
-|vendor  |	 2720|	   1024|    0x0550000| C5A0AEEC-13EA-11E5-A1B1-001E67CA0C3C|
-
-On the U-Boot console, run following command to write the GPT partitions on eMMC
-
-```
-=> mmc dev 0 0
-=> gpt write mmc 0 'name=boot,start=32M,size=64M,uuid=49A4D17F-93A3-45C1-A0DE-F50B2EBE2599;name=recovery,start=96M,size=64M,uuid=4177C722-9E92-4AAB-8644-43502BFD5506;name=system,start=160M,size=1536M,uuid=38F428E6-D326-425D-9140-6E0EA133647C;name=userdata,start=1696M,size=1024M,uuid=DC76DDA9-5AC1-491C-AF42-A82591580C0D;name=vendor,start=2720M,size=1024M,uuid=C5A0AEEC-13EA-11E5-A1B1-001E67CA0C3C;'
-```
-
-### Write Android Sparse Images
-Download images over TFTP and write it to eMMC. TFTP get will take a long time.
-
-```
-=> tftpboot c0000000 boot_fat_sparse.img ; mmc swrite c0000000 10000
-=> tftpboot 85000000 system.img00.gz && unzip 85000000 c0000000 && mmc erase  50000 100000 && mmc swrite c0000000 50000
-=> tftpboot 85000000 system.img01.gz && unzip 85000000 c0000000 && mmc erase 150000 100000 && mmc swrite c0000000 150000
-=> tftpboot 85000000 system.img02.gz && unzip 85000000 c0000000 && mmc erase 250000 100000 && mmc swrite c0000000 250000
-=> tftpboot c0000000 userdata.img && mmc erase 350000 200000 && mmc swrite c0000000 350000
-=> tftpboot c0000000 vendor.img ; mmc swrite c0000000 550000
-```
-
-### Boot Android from U-Boot
-Boot the image from eMMC as below.
-
-```
-=> setexpr bootm_low 0x82000000 '&' fe000000 
-=> setenv bootargs androidboot.hardware=akebi96 androidboot.selinux=permissive earlycon loglevel=15
-=> fatload mmc 0 0x82080000 Image
-=> fatload mmc 0 0x84a00000 ramdisk
-=> fatload mmc 0 0x84100000 uniphier-ld20-akebi96.dtb
-=> booti 0x82080000 0x84a00000 0x84100000
-```
+These are the files which is required to be installed on the board.
 

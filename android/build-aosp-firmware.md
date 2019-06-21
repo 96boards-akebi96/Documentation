@@ -49,7 +49,7 @@ cp ./u-boot.bin ~/aosp/images/
 
 #### Copy OP-TEE OS from AOSP
 
-After (AOSP build for Akebi96)[build-aosp.md#BuildAOSPforAkebi96], you can find tee-pager.bin under optee directory. So copy it in images directory.
+After [AOSP build for Akebi96](build-aosp.md#BuildAOSPforAkebi96), you can find tee-pager.bin under optee directory. So copy it in images directory.
 
 ```
 cd ~/aosp/android/out/target/product/akebi96/
@@ -78,32 +78,4 @@ cd ~/aosp/uniphier-bl/
 make all
 cat bl_ld20_global.bin ~/aosp/images/bl2.bin.gz > ~/aosp/images/uniphier_bl.bin
 ```
-
-#### Copy Images to TFTP directory
-Copy the firmware images to TFTP directory.
-
-```
-cd ~/aosp/images/
-cp fip.bin uniphier_bl.bin ~/aosp/tftpboot/
-```
-
-Also, copy prebuild VOC firmware.
-```
-cp ~/aosp/akebi96-prebuild/boot_voc_ld20.bin ~/aosp/tftpboot/
-```
-
-## Install Firmware
-This document will explain how to install firmware image via TFTP. Please follow the TFTP setup and HW preparation at (AOSP build for Akebi96)[build-aosp.md#InstallAOSPtoAkebi96].
-
-### Writing firmware on eMMC
-Get the image via TFTP and write it to eMMC boot0 partition.
-
-```
-=> mmc dev 0 1
-=> tftpboot c0000000 uniphier_bl.bin && mmc write c0000000 0 100
-=> tftpboot c0000000 fip.bin && mmc write c0000000 100 d00
-=> tftpboot c0000000 boot_voc_ld20.bin && mmc write c0000000 e00 200
-```
-
-OK, now we write the new firmware on eMMC.
 
