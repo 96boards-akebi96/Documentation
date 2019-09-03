@@ -98,13 +98,13 @@ Download an archive from the following site.
 
 * Open Source Mali GPUs Android Gralloc Module
 	* https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/android-gralloc-module
-	* BX304L01B-SW-99005-r16p0-01rel0.tgz
+	* TX041-SW-99005-r28p0-01rel0.tgz
 
 And copy it, and apply patches as below.
 
 ```
 cd ~/aosp/android/vendor/arm/gralloc
-cp BX304L01B-SW-99005-r16p0-01rel0.tgz .
+cp TX041-SW-99005-r28p0-01rel0.tgz .
 ./apply_patch.sh
 ```
 
