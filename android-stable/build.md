@@ -7,7 +7,7 @@
 On the Ubuntu 16.04, the following packages are needed for basic BSP.
 
 ```
-apt-get install --fix-missing -y git bc cmake ncurses-dev autoconf bison ccache cscope curl flex gdisk libfdt-dev libglib2.0-dev libpixman-1-dev netcat python-crypto python-serial uuid-dev xz-utils zlib1g-dev gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm cpio libssl-dev
+apt-get install --fix-missing -y git bc cmake ncurses-dev autoconf bison ccache cscope curl flex gdisk libfdt-dev libglib2.0-dev libpixman-1-dev netcat python-crypto python-serial uuid-dev xz-utils zlib1g-dev gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm cpio libssl-dev rsync
 ```
 
 And also the followings for AOSP.
@@ -61,7 +61,7 @@ Download an archive from the following site.
 	* https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/midgard-kernel
 	* TX041-SW-99002-r28p0-01rel0.tgz
 
-And extract it.
+And copy it under ~/aosp/bsp/kmod-mali.
 
 ```
 cd ~/aosp/bsp
@@ -100,7 +100,7 @@ Download an archive from the following site.
 	* https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/android-gralloc-module
 	* BX304L01B-SW-99005-r16p0-01rel0.tgz
 
-And extract it, and patch to it.
+And copy it, and apply patches as below.
 
 ```
 cd ~/aosp/android/vendor/arm/gralloc
