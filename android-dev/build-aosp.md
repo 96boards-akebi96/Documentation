@@ -54,6 +54,7 @@ git clone -b master --single-branch https://android.googlesource.com/kernel/conf
 git clone -b akebi96 --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/rtk_btusb.git
 git clone -b akebi96/r28p0 --single-branch https://github.com/96boards-akebi96/mali-kbase.git
+git clone -b master --single-branch https://github.com/96boards-akebi96/kmod-video-out.git
 ```
 
 ### Build ACK-4.19 based kernel
@@ -89,9 +90,12 @@ cp 8822bu.ko ~/aosp/images/
 cd ~/aosp/rtk_btusb/
 make KBUILD=${KBUILD} -j ${JOBS}
 cp rtk_btusb.ko ~/aosp/images/
+cd ~/aosp/kmod-video-out/
+make modules KERNEL_DIR=${KBUILD} -j ${JOBS}
+cp vocdrv_ld20/vocdrv-ld20.ko ~/aosp/images/
 cd ~/aosp/mali-kbase/
 make clean
-make KERNEL_DIR=~/aosp/linux MAKETOP=~/aosp/images O=${KBUILD} modules -j  $JOBS
+make KERNEL_DIR=~/aosp/linux MAKETOP=~/aosp/images O=${KBUILD} modules -j  ${JOBS}
 cp drivers/gpu/arm/midgard/mali_kbase.ko ~/aosp/images/
 ```
 
@@ -116,7 +120,10 @@ And copy the pre-build binaries
 ```
 cp ~/aosp/images/Image ~/aosp/images/uniphier-ld20-akebi96.dtb \
        ~/aosp/images/8822bu.ko ~/aosp/images/rtk_btusb.ko ~/aosp/images/mali_kbase.ko \
+       ~/aosp/images/vocdrv-ld20.ko \
        device/linaro/akebi96/copy/
+mkdir -p device/linaro/akebi96/copy/kernel-headers/asm/
+cp ~/aosp/kmod-video-out/vocdrv_ld20/vocd_driver.h device/linaro/akebi96/copy/kernel-headers/asm/
 ```
 
 ### Build AOSP for Akebi96
