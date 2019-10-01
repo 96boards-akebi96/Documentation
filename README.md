@@ -16,6 +16,8 @@ Akebi96 has a stable software stack (Linux v4.4 based kernel) and a development 
 
 ### Stable Software Stack
 
+- [Build and installed stable AOSP from Source](android-stable/build.md)
+ - Describe how to download, build and install stable version of AOSP on the Akebi96 board.
 
 
 ### Development Software Stack
