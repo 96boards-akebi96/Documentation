@@ -51,9 +51,9 @@ cd ~/aosp/
 git clone -b unph-android-v4.19-testing --single-branch https://github.com/96boards-akebi96/linux.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-configs.git
 git clone -b master --single-branch https://android.googlesource.com/kernel/configs
-git clone -b master --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
+git clone -b akebi96 --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/rtk_btusb.git
-git clone -b master --single-branch https://github.com/96boards-akebi96/mali-kbase.git
+git clone -b akebi96/r28p0 --single-branch https://github.com/96boards-akebi96/mali-kbase.git
 ```
 
 ### Build ACK-4.19 based kernel
@@ -89,7 +89,7 @@ cp 8822bu.ko ~/aosp/images/
 cd ~/aosp/rtk_btusb/
 make KBUILD=${KBUILD} -j ${JOBS}
 cp rtk_btusb.ko ~/aosp/images/
-cd ~/aosp/mali-midgard/
+cd ~/aosp/mali-kbase/
 make clean
 make KERNEL_DIR=~/aosp/linux MAKETOP=~/aosp/images O=${KBUILD} modules -j  $JOBS
 cp drivers/gpu/arm/midgard/mali_kbase.ko ~/aosp/images/
@@ -99,7 +99,7 @@ At this point, ~/aosp/images/ contain the kernel, dtb and modules that we copy o
 
 ## Build AOSP 9 for Akebi96
 
-### Downlaod AOSP 9 for Akebi96
+### Download AOSP 9 for Akebi96
 
 Download and sync the AOSP repositories. This may take a long time (depends on your network performance, etc.)
 
@@ -107,7 +107,7 @@ Download and sync the AOSP repositories. This may take a long time (depends on y
 cd ~/aosp/android
 git clone  -b master --single-branch https://github.com/96boards-akebi96/akebi96-manifests.git
 repo init -u https://android.googlesource.com/platform/manifest -b master
-cp akebi96-known-good-manifests/akebi96.xml .repo/manifests/
+cp akebi96-manifests/akebi96.xml .repo/manifests/
 repo sync -j $JOBS -m akebi96.xml
 ```
 
