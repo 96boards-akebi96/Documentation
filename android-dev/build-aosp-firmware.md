@@ -18,7 +18,7 @@ cd ~/aosp/
 git clone -b master --single-branch https://github.com/uniphier/uniphier-bl.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-prebuild.git
 git clone -b akebi96 --single-branch https://github.com/96boards-akebi96/u-boot.git
-git clone -b master --single-branch https://github.com/96boards-akebi96/arm-trusted-firmware.git
+git clone -b master --single-branch https://github.com/ARM-software/arm-trusted-firmware.git
 git clone -b mbedtls-2.4.2 --single-branch https://github.com/ARMmbed/mbedtls
 ```
 

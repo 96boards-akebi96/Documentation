@@ -53,7 +53,7 @@ git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-
 git clone -b master --single-branch https://android.googlesource.com/kernel/configs
 git clone -b master --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/rtk_btusb.git
-git clone -b master --single-branch https://github.com/96boards-akebi96/mali-midgard.git
+git clone -b master --single-branch https://github.com/96boards-akebi96/mali-kbase.git
 ```
 
 ### Build ACK-4.19 based kernel
@@ -105,7 +105,7 @@ Download and sync the AOSP repositories. This may take a long time (depends on y
 
 ```
 cd ~/aosp/android
-git clone  -b master --single-branch https://github.com/96boards-akebi96/akebi96-known-good-manifests.git
+git clone  -b master --single-branch https://github.com/96boards-akebi96/akebi96-manifests.git
 repo init -u https://android.googlesource.com/platform/manifest -b master
 cp akebi96-known-good-manifests/akebi96.xml .repo/manifests/
 repo sync -j $JOBS -m akebi96.xml
