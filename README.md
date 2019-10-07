@@ -17,23 +17,23 @@ Akebi96 has a stable software stack (Linux v4.4 based kernel) and a development 
 ### Stable Software Stack
 
 - [Build and installed stable AOSP from Source](android-stable/build.md)
- - Describe how to download, build and install stable version of AOSP on the Akebi96 board.
+  - Describe how to download, build and install stable version of AOSP on the Akebi96 board.
 
 
 ### Development Software Stack
 
 - [Build Firmware from Source](android-dev/build-aosp-firmware.md)
- - Describe how to download and build on the Akebi96 board.
+  - Describe how to download and build on the Akebi96 board.
 
 - [Build AOSP from Source](android-dev/build-aosp.md)
- - Describe how to download and build AOSP on the Akebi96 board.
+  - Describe how to download and build AOSP on the Akebi96 board.
 
 - [Flash Images via USB flash device](recovery/recovery-boot.md)
- - Describe how to install firmware and AOSP image on the Akebi96 board
+  - Describe how to install firmware and AOSP image on the Akebi96 board
    using a USB flash device.
 
 - [Flash Images via TFTP](android-dev/install-tftp.md)
- - Describe how to install firmware and AOSP image on the Akebi96 board
+  - Describe how to install firmware and AOSP image on the Akebi96 board
    using TFTP server.
 
 ## License
