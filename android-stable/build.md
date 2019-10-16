@@ -53,22 +53,6 @@ git clone -b 2018.02.6 --single-branch https://github.com/buildroot/buildroot
 git clone -b master --single-branch https://github.com/96boards-akebi96/buildroot-configs.git
 ```
 
-### Download Mali Related Archive
-
-Download an archive from the following site.
-
-* Open Source Mali Midgard GPU Kernel Drivers
-	* https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/midgard-kernel
-	* TX041-SW-99002-r28p0-01rel0.tgz
-
-And copy it under ~/aosp/bsp/kmod-mali.
-
-```
-cd ~/aosp/bsp
-mkdir kmod-mali
-cp TX041-SW-99002-r28p0-01rel0.tgz kmod-mali/
-```
-
 ### Build BSP
 
 And build BSP as below.
@@ -87,26 +71,10 @@ make
 ```
 cd ~/aosp/android
 repo init -u https://android.googlesource.com/platform/manifest -b android-9.0.0_r34
-[FIXME] git clone -b proprietary --single-branch https://github.com/96boards-akebi96/akebi96-manifests.git .repo/local_manifests
+git clone -b sni-release --single-branch https://github.com/96boards-akebi96/akebi96-manifests.git .repo/local_manifests
 repo sync -j $JOBS
 ```
 
-
-### Extract Mali Related Archive
-
-Download an archive from the following site.
-
-* Open Source Mali GPUs Android Gralloc Module
-	* https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/android-gralloc-module
-	* TX041-SW-99005-r28p0-01rel0.tgz
-
-And copy it, and apply patches as below.
-
-```
-cd ~/aosp/android/vendor/arm/gralloc
-cp TX041-SW-99005-r28p0-01rel0.tgz .
-./apply_patch.sh
-```
 
 ### Build AOSP for Akebi96
 
