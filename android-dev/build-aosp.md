@@ -88,8 +88,8 @@ make clean
 make KSRC=~/aosp/linux KVER=${KVER} O=${KBUILD} -j ${JOBS}
 cp 8822bu.ko ~/aosp/images/
 cd ~/aosp/rtk_btusb/
-make KBUILD=${KBUILD} -j ${JOBS}
-cp rtk_btusb.ko ~/aosp/images/
+make KERNEL_DIR=~/aosp/linux O=${KBUILD} -j ${JOBS}
+cp rtk_btusb_core.ko ~/aosp/images/rtk_btusb.ko
 cd ~/aosp/kmod-video-out/
 make modules KERNEL_DIR=${KBUILD} -j ${JOBS}
 cp vocdrv_ld20/vocdrv-ld20.ko ~/aosp/images/
