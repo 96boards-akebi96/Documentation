@@ -86,7 +86,7 @@ KVER=`make O=$KBUILD -s kernelrelease`
 cd ~/aosp/rtl8822bu/
 make clean
 make KSRC=~/aosp/linux KVER=${KVER} O=${KBUILD} -j ${JOBS}
-cp 8822bu.ko ~/aosp/images/
+cp rtl8822bu.ko ~/aosp/images/8822bu.ko
 cd ~/aosp/rtk_btusb/
 make KERNEL_DIR=~/aosp/linux O=${KBUILD} -j ${JOBS}
 cp rtk_btusb_core.ko ~/aosp/images/rtk_btusb.ko
