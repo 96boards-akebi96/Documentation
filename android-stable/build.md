@@ -90,13 +90,14 @@ make -j $JOBS
 
 ### Copy image to USB memory
 
-Set up USB memory formatted with FAT32 on PC, and find device file from dmesg.
+On PC, create at least 1 partition into USB memory, and format the first
+partion with VFAT filesystem. You can find device file from dmesg.
 (ex. /dev/sdc1)
 
 ```
 sudo mount /dev/sdc1 /mnt
 sudo mkdir -p /mnt/usb
-sudo cp ~/aosp/bsp/buildroot/out/images/* /mnt/usb/
+sudo cp ~/aosp/bsp/buildroot/output/images/* /mnt/usb/
 sudo umount /mnt
 ```
 
