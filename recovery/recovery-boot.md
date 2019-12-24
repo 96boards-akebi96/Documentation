@@ -11,11 +11,11 @@ The board has an Jumper pin 'J1000', which controls which Boot-Area is used for 
 The Recovery Mode is a custom U-Boot. This tries to boot up the device with following order.
 
 1. Wait 3 second for autoboot
-2. Enable USB and tries to search 'recovery.scr' U-Boot script from USB flash drive on USB ports.
-3. Check the USB-gadget is connected, if connected, run Fastboot server on the USB gadget port.
-4. If the USB-gadget port is not connected, run Fastboot server on ethernet port with address "192.168.11.10".
+2. Enable USB and tries to search 'recovery.scr' U-Boot script from USB flash drive on USB ports. If the script exists, execute it for recovery.
+3. Run Fastboot server on the USB gadget port. Wait for the port even if the recovery in 2. succeeds or fails.
 
 Of course, you can interrupt at 1. and run U-Boot commands manually for your custom recovery method, like TFTP boot.
+And you can reset the board if the recovery in 2. is done successfully.
 
 ## Recovery from USB Flash Drive
 
