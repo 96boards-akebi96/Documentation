@@ -66,7 +66,7 @@ cd ~/aosp/linux
 export KBUILD=~/aosp/kernel-build
 export KCONFIG_CONFIG=$KBUILD/.config
 export JOBS=`getconf _NPROCESSORS_ONLN`
-make O=$KBUILD  defconfig
+cp arch/arm64/configs/defconfig ${KCONFIG_CONFIG}
 ./scripts/kconfig/merge_config.sh -m ${KCONFIG_CONFIG} \
         ~/aosp/akebi96-configs/linux/akebi96-base.config \
         ~/aosp/configs/android-4.19/android-base.config \
