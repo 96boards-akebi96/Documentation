@@ -1,5 +1,8 @@
 # AOSP build for Akebi96
 
+AOSP development version for Akebi96 is based on AOSP P and Android Common
+Kernel 4.19 and 5.4 (WIP).
+
 ## Prerequisites
 
 ### Install Packages
@@ -48,12 +51,12 @@ Download kernel, kconfigs and out-of-tree drivers as below
 
 ```
 cd ~/aosp/
-git clone -b unph-android-v4.19-testing --single-branch https://github.com/96boards-akebi96/linux.git
+git clone -b unph-android-v4.19-testing https://github.com/96boards-akebi96/linux.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/akebi96-configs.git
 git clone -b master --single-branch https://android.googlesource.com/kernel/configs
 git clone -b akebi96 --single-branch https://github.com/96boards-akebi96/rtl8822bu.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/rtk_btusb.git
-git clone -b akebi96/r28p0 --single-branch https://github.com/96boards-akebi96/mali-kbase.git
+git clone -b akebi96/r29p0 --single-branch https://github.com/96boards-akebi96/mali-kbase.git
 git clone -b master --single-branch https://github.com/96boards-akebi96/kmod-video-out.git
 ```
 
@@ -79,7 +82,31 @@ cp ~/aosp/kernel-build/arch/arm64/boot/Image ~/aosp/images/
 cp ~/aosp/kernel-build/arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb ~/aosp/images/
 ```
 
-And Build out-of-tree drivers
+### Build ACK-5.4 based kernel
+
+```
+cd ~/aosp/linux
+git checkout -b WIP/unph-android-v5.4-testing origin/WIP/unph-android-v5.4-testing
+export KBUILD=~/aosp/kernel-build
+export KCONFIG_CONFIG=$KBUILD/.config
+export JOBS=`getconf _NPROCESSORS_ONLN`
+cp arch/arm64/configs/defconfig ${KCONFIG_CONFIG}
+./scripts/kconfig/merge_config.sh -m ${KCONFIG_CONFIG} \
+        ~/aosp/akebi96-configs/linux/akebi96-base.config \
+        ~/aosp/configs/android-5.4/android-base.config \
+        ~/aosp/configs/android-5.4/android-recommended.config \
+        ~/aosp/configs/android-5.4/android-recommended-arm64.config \
+        ~/aosp/akebi96-configs/linux/akebi96-aosp-vendor.config
+make O=$KBUILD  olddefconfig
+make O=$KBUILD  -j $JOBS  Image socionext/uniphier-ld20-akebi96.dtb
+cp ~/aosp/kernel-build/arch/arm64/boot/Image ~/aosp/images/
+cp ~/aosp/kernel-build/arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb ~/aosp/images/
+```
+
+### Build out-of-tree drivers
+
+For both 4.19 and 5.4 based kernel, we can build out-of-tree drivers in same
+way, but note that the 5.4 support is under development.
 
 ```
 KVER=`make O=$KBUILD -s kernelrelease`
