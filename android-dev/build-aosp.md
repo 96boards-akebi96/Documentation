@@ -142,6 +142,8 @@ cp akebi96-manifests/akebi96.xml .repo/manifests/
 repo sync -j $JOBS -m akebi96.xml
 ```
 
+NOTE: The akebi96-manifests master branch will build OP-TEE v3.3.0 based image. If you want to try OP-TEE 3.8.0+ (master branch), you can checkout WIP/optee-master branch instead of master branch.
+
 And copy the pre-build binaries
 
 ```
